@@ -835,7 +835,6 @@ protected:
     // We never need to destruct this polymorphicly, so we can make it
     // protected instead of virtual
     ~promise_base() noexcept {
-        internal::trace_runtime_vertex_destructor(this);
         clear();
     }
 
@@ -1170,6 +1169,11 @@ protected:
     }
 
     void move_it(future_base&& x, future_state_base* state) noexcept {
+        internal::trace_runtime_vertex_constructor(this);
+        internal::trace_runtime_edge(&x, this);
+        internal::trace_runtime_vertex_destructor(&x);
+        internal::trace_runtime_vertex_constructor(&x);
+
         _promise = x._promise;
         if (auto* p = _promise) {
             x.detach_promise();
@@ -1183,13 +1187,13 @@ protected:
     }
 
     void clear() noexcept {
+        internal::trace_runtime_vertex_destructor(this);
         if (_promise) {
             detach_promise();
         }
     }
 
     ~future_base() noexcept {
-        internal::trace_runtime_vertex_destructor(this);
         clear();
     }
 
