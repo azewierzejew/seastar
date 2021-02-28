@@ -26,7 +26,6 @@
 #include <seastar/core/reactor.hh>
 #include <map>
 #include <fstream>
-//#include <string>
 #include <seastar/core/sstring.hh>
 
 struct json_object;
